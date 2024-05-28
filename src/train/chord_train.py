@@ -256,7 +256,7 @@ def run(model=model, train_loader=train_loader, val_loader=val_loader, test_load
             targets = targets[:,:max_len].to(device)
 
             # out = model.infer(inputs, length=max_len)
-            out = model.transformer.infer(inputs)
+            out = model.infer(inputs)
             
             out = out[:,1:max_len+1]
             
