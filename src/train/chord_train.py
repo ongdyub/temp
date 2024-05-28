@@ -9,7 +9,7 @@ from tqdm import tqdm
 from ..model.chord_model import ChordLSTM, ChordTransformer, ChordT5
 from ..loader.chord_loader import ChordDataset, create_dataloaders
 
-verbose = False
+verbose = True
 detail = False
 
 # Hyper param & Dataset Setting
@@ -138,7 +138,8 @@ def run(model=model, train_loader=train_loader, val_loader=val_loader, test_load
             #T5
             output_ids = torch.argmax(outputs.logits, dim=2)
             
-            loss = criterion(outputs.view(-1, vocab_size), targets.view(-1))
+            # loss = criterion(outputs.view(-1, vocab_size), targets.view(-1))
+            loss = criterion(outputs.logits.view(-1, vocab_size), targets.view(-1))
             
             if torch.isnan(loss) or torch.isinf(loss):
                 print(f"Stopping training, encountered {loss.item()} loss at epoch {epoch}")
@@ -205,7 +206,9 @@ def run(model=model, train_loader=train_loader, val_loader=val_loader, test_load
                 output_ids = torch.argmax(outputs.logits, dim=2)
                 
                 output_ids = torch.argmax(outputs, dim=2)
-                loss = criterion(outputs.view(-1, vocab_size), targets.view(-1))
+                # loss = criterion(outputs.view(-1, vocab_size), targets.view(-1))
+                loss = criterion(outputs.logits.view(-1, vocab_size), targets.view(-1))
+                
                 if torch.isnan(loss) or torch.isinf(loss):
                     print(f"Stopping training, encountered NaN/Inf loss at epoch {epoch}")
                     continue
