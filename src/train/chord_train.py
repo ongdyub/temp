@@ -205,7 +205,7 @@ def run(model=model, train_loader=train_loader, val_loader=val_loader, test_load
                 #T5
                 output_ids = torch.argmax(outputs.logits, dim=2)
                 
-                output_ids = torch.argmax(outputs, dim=2)
+                # output_ids = torch.argmax(outputs, dim=2)
                 # loss = criterion(outputs.view(-1, vocab_size), targets.view(-1))
                 loss = criterion(outputs.logits.view(-1, vocab_size), targets.view(-1))
                 
