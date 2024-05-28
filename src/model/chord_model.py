@@ -201,17 +201,8 @@ class ChordT5(nn.Module):
         
         with torch.no_grad():
             for step in range(length):
-                # src_mask = self.generate_square_subsequent_mask(input_ids.size(1))                
-                inputs = input_ids[:,:]
-                targets = input_ids[:, 1:]
-                
-                sequence_length = targets.size(1)
-                tgt_mask = self.get_tgt_mask(sequence_length)
-                
-                output = self.forward(input_ids, targets, tgt_mask)
-            
-                # output = self.forward(input_ids, src_mask)
-                output = torch.argmax(output, dim=2)
+                output = self.forward(input_ids)
+                output = torch.argmax(output.logits, dim=2)
 
                 predict = output[:,-1].unsqueeze(1)
                 output_ids = torch.cat((input_ids, predict), dim=-1)
